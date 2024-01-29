@@ -1,15 +1,14 @@
 from PyQt6 import QtCore
 import sys
 from PyQt6.QtWidgets import QApplication, QTableWidget, QTableWidgetItem, QMainWindow, QSlider, QLabel, QVBoxLayout, QPushButton, QWidget, QHBoxLayout, QListWidget
-from PyQt6.QtCore import Qt
 from Sorting import Sorter
 from sqlalchemy.orm import sessionmaker
 
 from sqlalchemy import create_engine
-engine = create_engine(
-    'postgresql+psycopg2://postgres:cf79db54Q@localhost:6969/test_db', echo=True)
-Session = sessionmaker(bind=engine)
-session = Session()
+# engine = create_engine(
+#     'postgresql+psycopg2://postgres:cf79db54Q@localhost:6969/test_db', echo=True)
+# Session = sessionmaker(bind=engine)
+# session = Session()
 
 class MainWidget(QMainWindow):
 
@@ -27,7 +26,7 @@ class MainWidget(QMainWindow):
     
         self.current_page = 1
         self.items_per_page = 20
-        self.total_pages = (len(sorter.list_1) + self.items_per_page - 1) // self.items_per_page
+        self.total_pages = (len(sorter.list_data) + self.items_per_page - 1) // self.items_per_page
         
         self.prev_button.clicked.connect(self.go_to_previous_page)
         self.next_button.clicked.connect(self.go_to_next_page)
@@ -87,11 +86,7 @@ class MainWidget(QMainWindow):
             for index, field in enumerate(sorter.field_names):
                 self.table.setItem(j+1, index, QTableWidgetItem(str(getattr(item, field))))   
             
-        for row in range(self.table.rowCount()):
-            for column in range(self.table.columnCount()):
-                item = self.table.item(row, column)
-                if item is not None:
-                    item.setFlags(item.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+
                     
         self.list_widget.addItems(sorter.field_names)
         
@@ -108,18 +103,24 @@ class MainWidget(QMainWindow):
     def update_table(self):
         start_index = (self.current_page - 1) * self.items_per_page
         end_index = start_index + self.items_per_page
-        visible_data = sorter.list_1[start_index:end_index]
+        visible_data = sorter.list_data[start_index:end_index]
         
         self.table.setRowCount(len(visible_data))
         for row, rowData in enumerate(visible_data):
             for col, value in enumerate(rowData):
-                self.table.setItem(row, col, QTableWidgetItem(value))    
+                self.table.setItem(row, col, QTableWidgetItem(value))   
+                
+        for row in range(self.table.rowCount()):
+            for column in range(self.table.columnCount()):
+                item = self.table.item(row, column)
+                if item is not None:
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
         
 if __name__ == "__main__":
     sorter = Sorter()
     app = QApplication(sys.argv)  
     window = MainWidget(sorter)
     window.show()
-    session.close()
+    # session.close()
     sys.exit(app.exec())
     
