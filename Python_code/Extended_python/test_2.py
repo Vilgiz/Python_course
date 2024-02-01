@@ -1,72 +1,68 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QScrollArea, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
 
-class MainWindow(QMainWindow):
+class MainWindow(QWidget):
+    def __init__(self, first_name, last_name):
+        super().__init__()
+        self.first_name = first_name
+        self.last_name = last_name
+        self.initUI()
+
+    def initUI(self):
+        layout = QVBoxLayout()
+
+        # Метка для отображения имени и фамилии
+        self.info_label = QLabel(f"Привет, {self.first_name} {self.last_name}!")
+
+        # Добавляем метку в макет
+        layout.addWidget(self.info_label)
+
+        # Устанавливаем созданный макет для окна
+        self.setLayout(layout)
+
+class NameInputWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Table Pagination Example")
-        self.setGeometry(100, 100, 400, 300)
-        
-        # Создаем прокручиваемую область
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        
-        # Создаем виджет для таблицы
-        self.table_widget = QTableWidget()
-        self.table_widget.setColumnCount(3)
-        self.table_widget.setHorizontalHeaderLabels(["Column 1", "Column 2", "Column 3"])
-        
-        # Заполняем таблицу данными
-        self.data = []
-        for i in range(100):
-            self.data.append([f"Row {i+1}", f"Value {i+1}-1", f"Value {i+1}-2"])
-        
-        self.current_page = 1
-        self.items_per_page = 20
-        self.total_pages = (len(self.data) + self.items_per_page - 1) // self.items_per_page
-        
-        self.update_table()
-        
-        # Размещаем таблицу в прокручиваемой области
-        scroll_area.setWidget(self.table_widget)
-        
-        # Размещаем прокручиваемую область на главном виджете
-        main_widget = QWidget()
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(scroll_area)
-        main_widget.setLayout(main_layout)
-        self.setCentralWidget(main_widget)
-        
-        # Создаем кнопки для навигации по страницам
-        prev_button = QPushButton("Previous")
-        prev_button.clicked.connect(self.go_to_previous_page)
-        main_layout.addWidget(prev_button)
-        
-        next_button = QPushButton("Next")
-        next_button.clicked.connect(self.go_to_next_page)
-        main_layout.addWidget(next_button)
-        
-    def update_table(self):
-        start_index = (self.current_page - 1) * self.items_per_page
-        end_index = start_index + self.items_per_page
-        visible_data = self.data[start_index:end_index]
-        
-        self.table_widget.setRowCount(len(visible_data))
-        for row, rowData in enumerate(visible_data):
-            for col, value in enumerate(rowData):
-                self.table_widget.setItem(row, col, QTableWidgetItem(value))
-        
-    def go_to_previous_page(self):
-        if self.current_page > 1:
-            self.current_page -= 1
-            self.update_table()
-        
-    def go_to_next_page(self):
-        if self.current_page < self.total_pages:
-            self.current_page += 1
-            self.update_table()
+        self.initUI()
 
-# Создаем приложение и запускаем главное окно
+    def initUI(self):
+        layout = QVBoxLayout()
+
+        # Метки для имени и фамилии
+        self.name_label = QLabel("Введите ваше имя:")
+        self.last_name_label = QLabel("Введите вашу фамилию:")
+
+        # Поля для ввода имени и фамилии
+        self.name_input = QLineEdit()
+        self.last_name_input = QLineEdit()
+
+        # Кнопка для подтверждения ввода
+        self.confirm_button = QPushButton("Подтвердить")
+        self.confirm_button.clicked.connect(self.on_confirm_button_clicked)
+
+        # Добавляем виджеты в макет
+        layout.addWidget(self.name_label)
+        layout.addWidget(self.name_input)
+        layout.addWidget(self.last_name_label)
+        layout.addWidget(self.last_name_input)
+        layout.addWidget(self.confirm_button)
+
+        # Устанавливаем созданный макет для окна
+        self.setLayout(layout)
+
+    def on_confirm_button_clicked(self):
+        # Обработка нажатия кнопки подтверждения
+        first_name = self.name_input.text()
+        last_name = self.last_name_input.text()
+        
+        if first_name and last_name is not None:
+            self.main_window = MainWindow(first_name, last_name)
+            self.main_window.show()
+            self.close()
+        else:
+            print("Введите корректные данные!")
+
+# Создание приложения и отображение окна запроса ввода имени и фамилии
 app = QApplication([])
-window = MainWindow()
-window.show()
+input_window = NameInputWindow()
+input_window.show()
 app.exec()
