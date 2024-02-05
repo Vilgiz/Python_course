@@ -1,0 +1,20 @@
+{
+  "Reviews": [
+    {
+      "('Sdf', 'Sdf')": "",
+      "rate": 1
+    },
+    {
+      "('Ddd', 'D')": "ddfd",
+      "rate": 3
+    },
+    {
+      "('Dddf', 'S')": "fdss",
+      "rate": 4
+    },
+    {
+      "('Sdsa', 'S')": "bad",
+      "rate": 1
+    }
+  ]
+}
