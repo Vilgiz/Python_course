@@ -26,7 +26,7 @@ class Sorter:
         self.table_rows_2 = self.session.execute(stmt)
 
         self.table_rows = self.session.query(Market).all()
-        self.field_names = Market.__table__.columns.keys()
+        self.field_names = (Market.__table__.columns.keys())
 
         self.name_colomns = self.session.execute(stmt).keys()
         
