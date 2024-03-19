@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine, select, and_
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
-import os
+
 
 from models import Airlines, Airports, t_routes
 
@@ -17,10 +16,8 @@ class Sorter:
 
         Loads environment variables, creates a database engine, and sets up a session.
         """
-        load_dotenv()
         engine = create_engine(
-            f"mysql+mysqlconnector://{os.getenv('USER')}:{os.getenv('PASSWORD')}@"
-            f"{os.getenv('IP')}:{os.getenv('PORT')}/{os.getenv('DBNAME')}",
+            "sqlite:///flight.db",
             echo=False
         )
         Session = sessionmaker(bind=engine)

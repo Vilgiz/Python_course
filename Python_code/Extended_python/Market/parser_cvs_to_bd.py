@@ -1,11 +1,12 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Boolean
+from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Boolean, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import csv
 from datetime import datetime
 
 engine = create_engine(
-    'postgresql+psycopg2://postgres:cf79db54Q@localhost:6969/test_db', echo=True)
+    'sqlite:///market.db',
+    echo=False)
 
 con = engine.connect()
 #print(con)
@@ -76,84 +77,85 @@ class Market(Base):
     Tofu = Column(Boolean)
     WildHarvested = Column(Boolean)
     updateTime = Column(DateTime)
-# Base.metadata.create_all(engine)
+""" Base.metadata.create_all(engine)
 
 
-# Session = sessionmaker(bind=engine)
-# session = Session()
+Session = sessionmaker(bind=engine)
+session = Session()
 
-# with open('C:/Projects/Python_course/Python_code/Extended_python/Export.csv', newline='', encoding='utf-8') as csvfile:
-#     reader = csv.DictReader(csvfile)
-#     for row in reader:
-#         x = row['x']
-#         y = row['y']
-#         try:
-#             float(x)
-#             float(y)
-#         except ValueError:
-#             x = None
-#             y = None
-#         market = Market(
-#             FMID=(row['FMID']),
-#             MarketName=row['MarketName'],
-#             Website=row['Website'],
-#             Facebook=row['Facebook'],
-#             Twitter=row['Twitter'],
-#             Youtube=row['Youtube'],
-#             OtherMedia=row['OtherMedia'],
-#             street=row['street'],
-#             city=row['city'],
-#             County=row['County'],
-#             State=row['State'],
-#             zip=row['zip'],
-#             Season1Date=row['Season1Date'],
-#             Season1Time=row['Season1Time'],
-#             Season2Date=row['Season2Date'],
-#             Season2Time=row['Season2Time'],
-#             Season3Date=row['Season3Date'],
-#             Season3Time=row['Season3Time'],
-#             Season4Date=row['Season4Date'],
-#             Season4Time=row['Season4Time'],
-#             x=x,
-#             y=y,
-#             Location=row['Location'],
-#             Credit=row['Credit'] == 'Y',
-#             WIC=row['WIC'] == 'Y',
-#             WICcash=row['WICcash'] == 'Y',
-#             SFMNP=row['SFMNP'] == 'Y',
-#             SNAP=row['SNAP'] == 'Y',
-#             Organic=row['Organic'] == 'Y',
-#             Bakedgoods=row['Bakedgoods'] == 'Y',
-#             Cheese=row['Cheese'] == 'Y',
-#             Crafts=row['Crafts'] == 'Y',
-#             Flowers=(row['Flowers'] == 'Y'),
-#             Eggs=(row['Eggs'] == 'Y'),
-#             Seafood=(row['Seafood'] == 'Y'),
-#             Herbs=(row['Herbs'] == 'Y'),
-#             Vegetables=(row['Vegetables'] == 'Y'),
-#             Honey=(row['Honey'] == 'Y'),
-#             Jams=(row['Jams'] == 'Y'),
-#             Maple=(row['Maple'] == 'Y'),
-#             Meat=(row['Meat'] == 'Y'),
-#             Nursery=(row['Nursery'] == 'Y'),
-#             Nuts=(row['Nuts'] == 'Y'),
-#             Plants=(row['Plants'] == 'Y'),
-#             Poultry=(row['Poultry'] == 'Y'),
-#             Prepared=(row['Prepared'] == 'Y'),
-#             Soap=(row['Soap'] == 'Y'),
-#             Trees=(row['Trees'] == 'Y'),
-#             Wine=(row['Wine'] == 'Y'),
-#             Coffee=(row['Coffee'] == 'Y'),
-#             Beans=(row['Beans'] == 'Y'),
-#             Fruits=(row['Fruits'] == 'Y'),
-#             Grains=(row['Grains'] == 'Y'),
-#             Juices=(row['Juices'] == 'Y'),
-#             Mushrooms=(row['Mushrooms'] == 'Y'),
-#             PetFood=(row['PetFood'] == 'Y'),
-#             Tofu=(row['Tofu'] == 'Y'),
-#             WildHarvested=(row['WildHarvested'] == 'Y'),
-#             updateTime=datetime.strptime(
-#                 row['updateTime'], '%m/%d/%Y %I:%M:%S %p')
-#         )
-#         session.add(market)
-#     session.commit()
+with open('C:/Projects/Python_course/Python_code/Extended_python/Export.csv', newline='', encoding='utf-8') as csvfile:
+     reader = csv.DictReader(csvfile)
+     for row in reader:
+        x = row['x']
+        y = row['y']
+        try:
+            float(x)
+            float(y)
+        except ValueError:
+            x = None
+            y = None
+        market = Market(
+            FMID=(row['FMID']),
+            MarketName=row['MarketName'],
+            Website=row['Website'],
+            Facebook=row['Facebook'],
+            Twitter=row['Twitter'],
+            Youtube=row['Youtube'],
+            OtherMedia=row['OtherMedia'],
+            street=row['street'],
+            city=row['city'],
+            County=row['County'],
+            State=row['State'],
+            zip=row['zip'],
+            Season1Date=row['Season1Date'],
+            Season1Time=row['Season1Time'],
+            Season2Date=row['Season2Date'],
+            Season2Time=row['Season2Time'],
+            Season3Date=row['Season3Date'],
+            Season3Time=row['Season3Time'],
+            Season4Date=row['Season4Date'],
+            Season4Time=row['Season4Time'],
+            x=x,
+            y=y,
+            Location=row['Location'],
+            Credit=row['Credit'] == 'Y',
+            WIC=row['WIC'] == 'Y',
+            WICcash=row['WICcash'] == 'Y',
+            SFMNP=row['SFMNP'] == 'Y',
+            SNAP=row['SNAP'] == 'Y',
+            Organic=row['Organic'] == 'Y',
+            Bakedgoods=row['Bakedgoods'] == 'Y',
+            Cheese=row['Cheese'] == 'Y',
+            Crafts=row['Crafts'] == 'Y',
+            Flowers=(row['Flowers'] == 'Y'),
+            Eggs=(row['Eggs'] == 'Y'),
+            Seafood=(row['Seafood'] == 'Y'),
+            Herbs=(row['Herbs'] == 'Y'),
+            Vegetables=(row['Vegetables'] == 'Y'),
+            Honey=(row['Honey'] == 'Y'),
+            Jams=(row['Jams'] == 'Y'),
+            Maple=(row['Maple'] == 'Y'),
+            Meat=(row['Meat'] == 'Y'),
+            Nursery=(row['Nursery'] == 'Y'),
+            Nuts=(row['Nuts'] == 'Y'),
+            Plants=(row['Plants'] == 'Y'),
+            Poultry=(row['Poultry'] == 'Y'),
+            Prepared=(row['Prepared'] == 'Y'),
+            Soap=(row['Soap'] == 'Y'),
+            Trees=(row['Trees'] == 'Y'),
+            Wine=(row['Wine'] == 'Y'),
+            Coffee=(row['Coffee'] == 'Y'),
+            Beans=(row['Beans'] == 'Y'),
+            Fruits=(row['Fruits'] == 'Y'),
+            Grains=(row['Grains'] == 'Y'),
+            Juices=(row['Juices'] == 'Y'),
+            Mushrooms=(row['Mushrooms'] == 'Y'),
+            PetFood=(row['PetFood'] == 'Y'),
+            Tofu=(row['Tofu'] == 'Y'),
+            WildHarvested=(row['WildHarvested'] == 'Y'),
+            updateTime=datetime.strptime(
+                row['updateTime'], '%m/%d/%Y %I:%M:%S %p')
+        )
+        session.add(market)
+        session.commit()
+ """
